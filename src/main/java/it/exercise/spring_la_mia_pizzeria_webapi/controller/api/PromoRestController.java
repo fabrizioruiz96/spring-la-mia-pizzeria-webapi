@@ -10,42 +10,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.exercise.spring_la_mia_pizzeria_webapi.model.Pizza;
+import it.exercise.spring_la_mia_pizzeria_webapi.model.Promo;
 import it.exercise.spring_la_mia_pizzeria_webapi.service.PizzaService;
+import it.exercise.spring_la_mia_pizzeria_webapi.service.PromoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/pizzas")
-public class PizzaRestController {
+@RequestMapping("/api/promos")
+public class PromoRestController {
 
     @Autowired
-    private PizzaService pizzaService; 
+    private PromoService promoService;
 
-    @GetMapping
-    public List<Pizza> index(@RequestParam(name = "keyword", required = false) String name) {
+    @Autowired
+    private PizzaService pizzaService;
 
-        return pizzaService.findPizza(name);
+    @PostMapping("/{id}")
+    public Promo create(@PathVariable Integer id, @Valid @RequestBody Promo promo) {
+        return promoService.createPromo(id, promo);
     }
-    
-    @PostMapping
-    public Pizza create(@Valid @RequestBody Pizza pizza) {
 
-        return pizzaService.save(pizza);
+    @GetMapping("/{id}")
+    public List<Promo> index(@PathVariable Integer id) {
+        return pizzaService.findById(id).get().getPromos();
     }
 
     @PutMapping("/{id}")
-    public Pizza edit(@PathVariable Integer id, @RequestBody Pizza pizza) { 
-
-        return pizzaService.save(pizza);
+    public Promo edit(@PathVariable Integer id, @Valid @RequestBody Promo promo) {
+        return promoService.editPromo(id, promo);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-
-        pizzaService.delete(id);
+        promoService.deleteById(id);
     }
-
 }

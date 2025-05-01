@@ -20,7 +20,7 @@ public class PizzaService {
     @Autowired
     private PromoRepository promoRepo;
 
-    public List<Pizza> findBook (String name) {
+    public List<Pizza> findPizza (String name) {
 
         List<Pizza> result;
 

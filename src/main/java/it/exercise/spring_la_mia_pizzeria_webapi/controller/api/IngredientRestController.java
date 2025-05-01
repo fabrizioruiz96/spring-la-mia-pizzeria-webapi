@@ -10,42 +10,37 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.exercise.spring_la_mia_pizzeria_webapi.model.Pizza;
-import it.exercise.spring_la_mia_pizzeria_webapi.service.PizzaService;
+import it.exercise.spring_la_mia_pizzeria_webapi.model.Ingredient;
+import it.exercise.spring_la_mia_pizzeria_webapi.service.IngredientService;
 import jakarta.validation.Valid;
 
+
 @RestController
-@RequestMapping("/api/pizzas")
-public class PizzaRestController {
+@RequestMapping("/api/ingredient")
+public class IngredientRestController {
 
     @Autowired
-    private PizzaService pizzaService; 
+    private IngredientService ingredientService;
+
+    @PostMapping
+    public Ingredient create(@Valid @RequestBody Ingredient ingredient) {
+        return ingredientService.save(ingredient);
+    }
 
     @GetMapping
-    public List<Pizza> index(@RequestParam(name = "keyword", required = false) String name) {
-
-        return pizzaService.findPizza(name);
-    }
-    
-    @PostMapping
-    public Pizza create(@Valid @RequestBody Pizza pizza) {
-
-        return pizzaService.save(pizza);
+    public List<Ingredient> index() {
+        return ingredientService.findIngredientList();
     }
 
     @PutMapping("/{id}")
-    public Pizza edit(@PathVariable Integer id, @RequestBody Pizza pizza) { 
-
-        return pizzaService.save(pizza);
+    public Ingredient edit(@PathVariable Integer id, @Valid @RequestBody Ingredient ingredient) {
+        return ingredientService.edit(id, ingredient);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-
-        pizzaService.delete(id);
+        ingredientService.delete(id);
     }
-
 }

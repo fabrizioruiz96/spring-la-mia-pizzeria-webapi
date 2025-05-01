@@ -15,17 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.exercise.spring_la_mia_pizzeria_webapi.model.Pizza;
+import it.exercise.spring_la_mia_pizzeria_webapi.model.Promo;
 import it.exercise.spring_la_mia_pizzeria_webapi.repository.IngredientRepository;
 import it.exercise.spring_la_mia_pizzeria_webapi.service.PizzaService;
-import it.exercise.spring_la_mia_pizzeria_webapi.service.PromoService;
 import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/pizzas")
 public class PizzaController {
-
-    @Autowired
-    private PromoService promoService;
 
     @Autowired
     private PizzaService pizzaService;
@@ -36,7 +33,7 @@ public class PizzaController {
     @GetMapping
     public String index(Model model, @RequestParam(name = "keyword", required = false) String name) {
 
-        model.addAttribute("list", pizzaService.findBook(name));
+        model.addAttribute("list", pizzaService.findPizza(name));
 
         return "pizzas/index";
     }
@@ -119,7 +116,13 @@ public class PizzaController {
     @GetMapping("/{id}/promo")
     public String promo(@PathVariable("id") Integer id, Model model) {
 
-        model.addAttribute("promo", promoService.create(id));
+        Pizza p = pizzaService.findById(id).get();
+
+        Promo promo = new Promo();
+
+        promo.setPizza(p);
+
+        model.addAttribute("promo", promo);
         model.addAttribute("editMode", false);
 
         return "/promos/edit";

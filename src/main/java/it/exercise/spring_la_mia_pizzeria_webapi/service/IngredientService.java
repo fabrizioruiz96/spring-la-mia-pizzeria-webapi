@@ -34,4 +34,11 @@ public class IngredientService {
         ingredientRepo.deleteById(id);
     }
 
+    public Ingredient edit(Integer id, Ingredient ingredient) {
+
+        Ingredient vecchioIngredient = ingredientRepo.findById(id).get();
+        vecchioIngredient.setIngredient(ingredient.getIngredient());
+
+        return ingredientRepo.save(vecchioIngredient);
+    }
 }
